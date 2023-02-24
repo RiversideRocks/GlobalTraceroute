@@ -55,9 +55,5 @@ def add():
     except:
         return "Missing IP/token param"
 
-    mydb.commit()
-
-    return Response(json.dumps(l), content_type="application/json")
-
 if __name__ == '__main__':
     app.run(debug=True)
