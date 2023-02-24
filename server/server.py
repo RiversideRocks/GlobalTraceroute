@@ -45,8 +45,8 @@ def add():
         city = api["city"]
         region = api["region"]
         country = api["country_name"]
-        lat = api["latitude"]
-        lon = api["longitude"]
+        lat = str(api["latitude"])
+        lon = str(api["longitude"])
 
         sql = "INSERT INTO traceroute (IP, City, Region, Country, Lat, Lon) VALUES (%s, %s, %s, %s, %s, %s)"
         val = (ip, city, region, country, lat, lon)
