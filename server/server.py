@@ -55,5 +55,17 @@ def add():
     except:
         return "Missing IP/token param"
 
+@app.route('/clear', methods=["POST"])
+def clear():
+    mycursor = mydb.cursor()
+
+    sql = "DELETE FROM traceroute WHERE 1=1"
+
+    mycursor.execute(sql)
+
+    mydb.commit()
+    return "OK"
+
+
 if __name__ == '__main__':
     app.run(debug=True)
