@@ -6,6 +6,6 @@ CREATE TABLE traceroute (
     City varchar(255),
     Region varchar(255),
     Country varchar(255),
-    Lat float(255),
-    Lon float(255)
+    Lat varchar(255),
+    Lon varchar(255)
 );
