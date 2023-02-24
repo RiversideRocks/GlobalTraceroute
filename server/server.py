@@ -57,6 +57,9 @@ def add():
 
 @app.route('/clear', methods=["POST"])
 def clear():
+    token = request.form["token"]
+    if token != os.getenv("TOKEN"):
+        return "Invalid token"
     mycursor = mydb.cursor()
 
     sql = "DELETE FROM traceroute WHERE 1=1"
