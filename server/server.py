@@ -35,25 +35,25 @@ def hosts():
 @app.route('/add', methods=["POST"])
 def add():
     mycursor = mydb.cursor()
-    try:
-        ip = request.form["ip"]
-        token = request.form["token"]
-        if token != os.getenv("TOKEN"):
-            return "Invalid token"
-        
-        api = requests.get("https://ipapi.co/" + str(ip) + "/json").json()
-        city = api["city"]
-        region = api["region"]
-        country = api["country_name"]
-        lat = api["latitude"]
-        lon = api["longitude"]
+    #try:
+    ip = request.form["ip"]
+    token = request.form["token"]
+    if token != os.getenv("TOKEN"):
+        return "Invalid token"
+    
+    api = requests.get("https://ipapi.co/" + str(ip) + "/json").json()
+    city = api["city"]
+    region = api["region"]
+    country = api["country_name"]
+    lat = api["latitude"]
+    lon = api["longitude"]
 
-        sql = "INSERT INTO traceroute (IP, City, Region, Country, Lat, Lon) VALUES (%s, %s, %s, %s, %s, %s)"
-        val = (ip, city, region, country, lat, lon)
-        mycursor.execute(sql, val)
-        return "OK"
-    except:
-        return "Missing IP/token param"
+    sql = "INSERT INTO traceroute (IP, City, Region, Country, Lat, Lon) VALUES (%s, %s, %s, %s, %s, %s)"
+    val = (ip, city, region, country, lat, lon)
+    mycursor.execute(sql, val)
+    return "OK"
+    #except:
+    #    return "Missing IP/token param"
 
 if __name__ == '__main__':
     app.run(debug=True)
