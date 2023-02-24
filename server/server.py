@@ -3,6 +3,7 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 import json
+import requests
 
 app = Flask(__name__)
 load_dotenv()
@@ -19,7 +20,7 @@ def home():
     return Response("Hello!", content_type="text/plain")
 
 @app.route('/hosts')
-def home():
+def hosts():
     mycursor = mydb.cursor()
 
     mycursor.execute("SELECT * FROM traceroute")
@@ -28,6 +29,33 @@ def home():
     l = []
     for x in myresult:
         l.append(x)
+
+    return Response(json.dumps(l), content_type="application/json")
+
+@app.route('/add', methods=["POST"])
+def add():
+    mycursor = mydb.cursor()
+    try:
+        ip = request.form["ip"]
+        token = request.form["token"]
+        if token != os.getenv("TOKEN"):
+            return "Invalid token"
+        
+        api = requests.get("https://ipapi.co/" + str(ip) + "/json").json()
+        city = api["city"]
+        region = api["region"]
+        country = api["country_name"]
+        lat = api["latitude"]
+        lon = api["longitude"]
+
+        sql = "INSERT INTO traceroute (IP, City, Region, Country, Lat, Lon) VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (ip, city, region, country, lat, lon)
+        mycursor.execute(sql, val)
+        return "OK"
+    except:
+        return "Missing IP/token param"
+
+    mydb.commit()
 
     return Response(json.dumps(l), content_type="application/json")
 
