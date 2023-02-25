@@ -30,7 +30,9 @@ def hosts():
     for x in myresult:
         l.append(x)
 
-    return Response(json.dumps(l), content_type="application/json")
+    request = Response(json.dumps(l), content_type="application/json")
+    request.headers["Access-Control-Allow-Origin"] = "*"
+    return request
 
 @app.route('/add', methods=["POST"])
 def add():
@@ -67,7 +69,8 @@ def clear():
     mycursor.execute(sql)
 
     mydb.commit()
-    return "OK"
+    request.headers["Access-Control-Allow-Origin"] = "*"
+    return request
 
 
 if __name__ == '__main__':
